@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <title>HTML Preview Tool</title>
-
+<link rel="manifest" href="manifest.json" />
 <style>
 body{
   font-family: Arial, sans-serif;
@@ -73,6 +73,10 @@ function render(){
   document.getElementById("preview").srcdoc = html;
 }
 </script>
-
+<script>
+        if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/render-web/service-worker.js');
+        }
+  </script>
 </body>
 </html>
