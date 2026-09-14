@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>Web Preview Studio</title>
 <link rel="manifest" href="manifest.json" />
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -25,28 +25,36 @@
   --hover: #1f2937;
   --tab-active: #1c2128;
   --glow: 0 0 20px rgba(88,166,255,0.15);
+  --header-height: 52px;
+  --mobile-nav-height: 56px;
+}
+
+html, body {
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  touch-action: manipulation;
 }
 
 body {
-  font-family: 'Inter', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  height: 100vh;
   display: flex;
   flex-direction: column;
-  overflow: hidden;
 }
 
 /* ── TOPBAR ── */
 .topbar {
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 10px 16px;
+  gap: 10px;
+  padding: 8px 14px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
-  z-index: 10;
+  height: var(--header-height);
+  z-index: 20;
 }
 
 .logo {
@@ -54,20 +62,27 @@ body {
   align-items: center;
   gap: 8px;
   font-weight: 700;
-  font-size: 15px;
+  font-size: 14px;
   color: var(--text);
   letter-spacing: -0.3px;
+  white-space: nowrap;
 }
 
-.logo svg { color: var(--accent); }
+.logo svg { color: var(--accent); flex-shrink: 0; }
 
-.topbar-actions { display: flex; gap: 8px; margin-left: auto; align-items: center; }
+.topbar-actions {
+  display: flex;
+  gap: 6px;
+  margin-left: auto;
+  align-items: center;
+}
 
 .btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 6px;
-  padding: 7px 14px;
+  padding: 7px 12px;
   border: none;
   border-radius: 6px;
   font-family: 'Inter', sans-serif;
@@ -76,41 +91,30 @@ body {
   cursor: pointer;
   transition: all 0.15s ease;
   white-space: nowrap;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
-.btn-primary {
-  background: var(--accent);
-  color: #0d1117;
-}
-.btn-primary:hover { background: #79b8ff; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(88,166,255,0.3); }
+.btn-primary { background: var(--accent); color: #0d1117; }
+.btn-primary:hover, .btn-primary:active { background: #79b8ff; transform: translateY(-1px); }
 
-.btn-success {
-  background: var(--accent2);
-  color: #0d1117;
-}
-.btn-success:hover { background: #56d364; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(63,185,80,0.3); }
+.btn-success { background: var(--accent2); color: #0d1117; font-weight: 600; }
+.btn-success:hover, .btn-success:active { background: #56d364; transform: translateY(-1px); box-shadow: 0 4px 12px rgba(63,185,80,0.3); }
 
-.btn-ghost {
-  background: var(--surface2);
-  color: var(--text);
-  border: 1px solid var(--border);
-}
-.btn-ghost:hover { background: var(--surface3); }
+.btn-ghost { background: var(--surface2); color: var(--text); border: 1px solid var(--border); }
+.btn-ghost:hover, .btn-ghost:active { background: var(--surface3); }
 
-.btn-danger {
-  background: transparent;
-  color: var(--accent3);
-  border: 1px solid var(--accent3);
-}
-.btn-danger:hover { background: rgba(247,129,102,0.1); }
+.btn-danger { background: transparent; color: var(--accent3); border: 1px solid var(--accent3); }
+.btn-danger:hover, .btn-danger:active { background: rgba(247,129,102,0.1); }
 
-.btn-sm { padding: 4px 10px; font-size: 12px; }
+.btn-sm { padding: 5px 9px; font-size: 12px; }
 
-/* ── LAYOUT ── */
+/* ── WORKSPACE ── */
 .workspace {
   display: flex;
   flex: 1;
   overflow: hidden;
+  position: relative;
 }
 
 /* ── SIDEBAR ── */
@@ -122,10 +126,12 @@ body {
   display: flex;
   flex-direction: column;
   overflow: hidden;
+  transition: transform 0.25s ease, width 0.25s ease;
+  z-index: 15;
 }
 
 .sidebar-header {
-  padding: 12px 14px 8px;
+  padding: 10px 14px 8px;
   font-size: 11px;
   font-weight: 600;
   color: var(--text3);
@@ -147,7 +153,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 10px;
+  padding: 10px;
   border-radius: 6px;
   cursor: pointer;
   transition: all 0.12s ease;
@@ -155,7 +161,7 @@ body {
   user-select: none;
 }
 
-.file-item:hover { background: var(--surface2); }
+.file-item:hover, .file-item:active { background: var(--surface2); }
 .file-item.active { background: var(--surface3); }
 .file-item.active::before {
   content: '';
@@ -170,7 +176,7 @@ body {
 }
 
 .file-icon {
-  font-size: 14px;
+  font-size: 15px;
   width: 20px;
   text-align: center;
   flex-shrink: 0;
@@ -198,22 +204,22 @@ body {
 .badge-main { background: rgba(63,185,80,0.2);   color: #3fb950; font-size: 9px; }
 
 .file-remove {
-  opacity: 0;
+  opacity: 0.7;
   transition: opacity 0.12s;
   cursor: pointer;
-  padding: 2px 4px;
-  border-radius: 3px;
+  padding: 4px 6px;
+  border-radius: 4px;
   color: var(--text3);
-  font-size: 13px;
+  font-size: 14px;
   flex-shrink: 0;
   background: none;
   border: none;
 }
 .file-item:hover .file-remove { opacity: 1; }
-.file-remove:hover { color: var(--accent3); background: rgba(247,129,102,0.1); }
+.file-remove:hover, .file-remove:active { color: var(--accent3); background: rgba(247,129,102,0.15); }
 
 .empty-state {
-  padding: 20px 14px;
+  padding: 24px 14px;
   text-align: center;
   color: var(--text3);
   font-size: 12px;
@@ -223,7 +229,7 @@ body {
 /* ── DROP ZONE ── */
 .drop-zone {
   margin: 8px;
-  padding: 16px 12px;
+  padding: 14px 10px;
   border: 2px dashed var(--border);
   border-radius: 8px;
   text-align: center;
@@ -247,6 +253,7 @@ body {
   flex-direction: column;
   overflow: hidden;
   background: var(--bg);
+  position: relative;
 }
 
 .editor-tabs {
@@ -255,6 +262,7 @@ body {
   border-bottom: 1px solid var(--border);
   overflow-x: auto;
   flex-shrink: 0;
+  -webkit-overflow-scrolling: touch;
 }
 
 .editor-tabs::-webkit-scrollbar { height: 3px; }
@@ -265,7 +273,7 @@ body {
   display: flex;
   align-items: center;
   gap: 6px;
-  padding: 9px 16px;
+  padding: 9px 14px;
   font-size: 12px;
   color: var(--text2);
   cursor: pointer;
@@ -275,6 +283,7 @@ body {
   background: var(--surface);
   font-family: 'JetBrains Mono', monospace;
   flex-shrink: 0;
+  user-select: none;
 }
 .editor-tab:hover { color: var(--text); background: var(--tab-active); }
 .editor-tab.active {
@@ -293,23 +302,53 @@ body {
 .code-editor {
   width: 100%;
   height: 100%;
-  padding: 16px;
+  padding: 14px;
   background: var(--bg);
   color: var(--text);
   font-family: 'JetBrains Mono', monospace;
-  font-size: 13.5px;
-  line-height: 1.7;
+  font-size: 14px;
+  line-height: 1.6;
   border: none;
   outline: none;
   resize: none;
   tab-size: 2;
   display: none;
+  border-radius: 0;
+  -webkit-appearance: none;
 }
 .code-editor.active { display: block; }
 .code-editor::placeholder { color: var(--text3); }
-.code-editor::-webkit-scrollbar { width: 6px; }
-.code-editor::-webkit-scrollbar-track { background: transparent; }
-.code-editor::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* Quick Mobile Coding Toolbar */
+.quick-code-bar {
+  display: none;
+  gap: 4px;
+  padding: 6px 8px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  overflow-x: auto;
+  flex-shrink: 0;
+  -webkit-overflow-scrolling: touch;
+  z-index: 10;
+}
+.quick-code-btn {
+  padding: 6px 10px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  color: var(--accent);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  user-select: none;
+  flex-shrink: 0;
+}
+.quick-code-btn:active {
+  background: var(--accent);
+  color: #0d1117;
+}
 
 .no-file-msg {
   display: flex;
@@ -320,17 +359,21 @@ body {
   color: var(--text3);
   gap: 12px;
   font-size: 14px;
+  text-align: center;
+  padding: 20px;
 }
 .no-file-msg svg { opacity: 0.3; }
 
 /* ── DIVIDER ── */
 .divider {
-  width: 5px;
+  width: 6px;
   background: var(--border);
   cursor: col-resize;
   flex-shrink: 0;
   transition: background 0.15s;
   position: relative;
+  touch-action: none;
+  z-index: 10;
 }
 .divider:hover, .divider.dragging { background: var(--accent); }
 
@@ -341,21 +384,23 @@ body {
   flex-direction: column;
   overflow: hidden;
   border-left: 1px solid var(--border);
+  background: #ffffff;
 }
 
 .preview-header {
   display: flex;
   align-items: center;
   gap: 8px;
-  padding: 8px 14px;
+  padding: 6px 12px;
   background: var(--surface);
   border-bottom: 1px solid var(--border);
   flex-shrink: 0;
+  height: 38px;
 }
 
 .preview-dots { display: flex; gap: 6px; }
 .preview-dot {
-  width: 11px; height: 11px;
+  width: 10px; height: 10px;
   border-radius: 50%;
 }
 .dot-red { background: #ff5f57; }
@@ -368,9 +413,12 @@ body {
   flex: 1;
   text-align: center;
   font-family: 'JetBrains Mono', monospace;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.preview-actions { display: flex; gap: 6px; margin-left: auto; }
+.preview-actions { display: flex; gap: 4px; margin-left: auto; }
 
 .preview-frame {
   flex: 1;
@@ -394,46 +442,88 @@ body {
   background: var(--surface);
   color: var(--text3);
   gap: 14px;
-  font-size: 14px;
+  font-size: 13px;
   text-align: center;
+  padding: 20px;
 }
-.preview-placeholder p { max-width: 200px; line-height: 1.5; }
+.preview-placeholder p { max-width: 240px; line-height: 1.5; }
+
+/* ── MOBILE BACKDROP FOR SIDEBAR ── */
+.sidebar-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(2px);
+  z-index: 80;
+}
+.sidebar-backdrop.active { display: block; }
+
+/* ── MOBILE NAV BAR ── */
+.mobile-nav {
+  display: none;
+  height: var(--mobile-nav-height);
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  z-index: 30;
+}
+.mobile-nav-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: var(--text2);
+  font-size: 11px;
+  font-weight: 500;
+  cursor: pointer;
+  border: none;
+  background: transparent;
+  transition: color 0.15s;
+  user-select: none;
+}
+.mobile-nav-item svg { width: 18px; height: 18px; }
+.mobile-nav-item.active { color: var(--accent); font-weight: 600; }
 
 /* ── STATUS BAR ── */
 .statusbar {
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 4px 14px;
+  gap: 12px;
+  padding: 4px 12px;
   background: var(--accent);
   color: #0d1117;
   font-size: 11px;
   font-weight: 500;
   flex-shrink: 0;
+  height: 24px;
 }
 .statusbar .divider-v { width: 1px; height: 12px; background: rgba(0,0,0,0.2); }
-.status-item { display: flex; align-items: center; gap: 4px; }
-.status-right { margin-left: auto; display: flex; gap: 16px; }
+.status-item { display: flex; align-items: center; gap: 4px; white-space: nowrap; }
+.status-right { margin-left: auto; display: flex; gap: 12px; }
 
 /* ── MODAL ── */
 .modal-overlay {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0,0,0,0.6);
+  background: rgba(0,0,0,0.7);
   backdrop-filter: blur(4px);
   z-index: 100;
   align-items: center;
   justify-content: center;
+  padding: 16px;
 }
 .modal-overlay.open { display: flex; }
 .modal {
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: 12px;
-  padding: 24px;
-  width: 480px;
-  max-width: 95vw;
+  padding: 20px;
+  width: 100%;
+  max-width: 440px;
   box-shadow: 0 25px 60px rgba(0,0,0,0.5);
   animation: modalIn 0.2s ease;
 }
@@ -441,10 +531,10 @@ body {
   from { opacity: 0; transform: scale(0.95) translateY(-10px); }
   to { opacity: 1; transform: scale(1) translateY(0); }
 }
-.modal h3 { font-size: 16px; margin-bottom: 16px; color: var(--text); }
+.modal h3 { font-size: 16px; margin-bottom: 14px; color: var(--text); }
 .modal-input {
   width: 100%;
-  padding: 9px 12px;
+  padding: 10px 12px;
   background: var(--bg);
   border: 1px solid var(--border);
   border-radius: 6px;
@@ -457,9 +547,21 @@ body {
 .modal-actions { display: flex; gap: 8px; margin-top: 16px; justify-content: flex-end; }
 
 /* ── TOAST ── */
-.toast-container { position: fixed; bottom: 40px; right: 20px; z-index: 200; display: flex; flex-direction: column; gap: 8px; }
+.toast-container {
+  position: fixed;
+  bottom: 64px;
+  right: 16px;
+  left: 16px;
+  z-index: 200;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 8px;
+  pointer-events: none;
+}
 .toast {
-  padding: 10px 16px;
+  pointer-events: auto;
+  padding: 10px 14px;
   background: var(--surface2);
   border: 1px solid var(--border);
   border-radius: 8px;
@@ -470,17 +572,68 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
-  max-width: 300px;
+  max-width: 320px;
 }
 .toast.success { border-color: var(--accent2); }
 .toast.error { border-color: var(--accent3); }
 @keyframes toastIn {
-  from { opacity: 0; transform: translateX(20px); }
-  to { opacity: 1; transform: translateX(0); }
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ── MEDIA QUERIES FOR MOBILE ── */
+@media (max-width: 768px) {
+  .logo span { display: none; }
+  
+  .btn-label { display: none; }
+  .btn { padding: 8px; min-width: 36px; height: 36px; }
+  .btn-success { padding: 8px 12px; }
+  .btn-success .btn-label { display: inline; }
+  
+  .mobile-nav { display: flex; }
+  .quick-code-bar { display: flex; }
+  
+  .statusbar { display: none; }
+  .toast-container { bottom: 68px; }
+
+  .divider { display: none !important; }
+
+  /* Mobile mode tabs handling */
+  .workspace { position: relative; }
+
+  /* Sidebar drawer on mobile */
+  .sidebar {
+    position: fixed;
+    top: var(--header-height);
+    left: 0;
+    bottom: var(--mobile-nav-height);
+    width: 280px;
+    transform: translateX(-100%);
+    box-shadow: 5px 0 25px rgba(0,0,0,0.5);
+  }
+  .sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .editor-panel, .preview-panel {
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute;
+    inset: 0;
+  }
+
+  [data-mobile-view="code"] .editor-panel { display: flex !important; z-index: 5; }
+  [data-mobile-view="code"] .preview-panel { display: none !important; }
+
+  [data-mobile-view="preview"] .editor-panel { display: none !important; }
+  [data-mobile-view="preview"] .preview-panel { display: flex !important; z-index: 5; }
+  
+  [data-mobile-view="files"] .editor-panel { display: flex !important; z-index: 1; }
+  [data-mobile-view="files"] .preview-panel { display: none !important; }
 }
 
 /* Scrollbar global */
-::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar { width: 5px; height: 5px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 </style>
@@ -489,55 +642,57 @@ body {
 
 <!-- TOPBAR -->
 <header class="topbar">
-  <div class="logo">
-    <svg width="20" height="20" fill="currentColor" viewBox="0 0 24 24">
+  <div class="logo" title="Web Preview Studio">
+    <svg width="22" height="22" fill="currentColor" viewBox="0 0 24 24">
       <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
     </svg>
-    Web Preview Studio
+    <span>Web Preview Studio</span>
   </div>
   <div class="topbar-actions">
-    <button class="btn btn-ghost" onclick="newFile()">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
-      New File
+    <button class="btn btn-ghost" onclick="newFile()" title="Tạo file mới (Ctrl+N)">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14,2 14,8 20,8"/></svg>
+      <span class="btn-label">Tạo file</span>
     </button>
-    <label class="btn btn-ghost" style="cursor:pointer">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-      Import Files
+    <label class="btn btn-ghost" style="cursor:pointer" title="Import file từ máy">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17,8 12,3 7,8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+      <span class="btn-label">Import</span>
       <input type="file" id="fileInput" multiple accept=".html,.css,.js,.htm" style="display:none" onchange="handleFileImport(this)">
     </label>
-    <button class="btn btn-success" onclick="runPreview()">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
-      Run
+    <button class="btn btn-success" onclick="runPreview()" title="Chạy Preview (Ctrl+Enter)">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polygon points="5,3 19,12 5,21"/></svg>
+      <span class="btn-label">Run</span>
     </button>
-    <button class="btn btn-ghost" onclick="clearAll()">
-      <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
-      Clear
+    <button class="btn btn-ghost" onclick="clearAll()" title="Xoá tất cả file">
+      <svg width="15" height="15" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="3,6 5,6 21,6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/><path d="M10 11v6M14 11v6"/><path d="M9 6V4a1 1 0 011-1h4a1 1 0 011 1v2"/></svg>
     </button>
   </div>
 </header>
 
 <!-- WORKSPACE -->
-<div class="workspace">
+<div class="workspace" id="workspace" data-mobile-view="code">
+
+  <!-- BACKDROP FOR MOBILE SIDEBAR -->
+  <div class="sidebar-backdrop" id="sidebarBackdrop" onclick="setMobileView('code')"></div>
 
   <!-- SIDEBAR -->
-  <aside class="sidebar">
+  <aside class="sidebar" id="sidebar">
     <div class="sidebar-header">
-      Files
+      Tệp tin (Files)
       <span id="fileCount" style="background:var(--surface3);padding:1px 6px;border-radius:10px;font-size:10px;color:var(--text2);">0</span>
     </div>
 
     <div class="drop-zone" id="dropZone" onclick="document.getElementById('fileInput').click()">
-      <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:0.5">
+      <svg width="22" height="22" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" style="opacity:0.5">
         <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
         <polyline points="17,8 12,3 7,8"/>
         <line x1="12" y1="3" x2="12" y2="15"/>
       </svg>
-      Drop files here<br/>or click to browse
+      Kéo thả file vào đây<br/>hoặc nhấn để chọn
     </div>
 
     <div class="file-list" id="fileList">
       <div class="empty-state" id="emptyState">
-        No files yet.<br/>Import HTML, CSS, JS<br/>files to get started.
+        Chưa có file nào.<br/>Tạo hoặc import file HTML, CSS, JS để bắt đầu.
       </div>
     </div>
   </aside>
@@ -551,8 +706,25 @@ body {
           <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
           <polyline points="14,2 14,8 20,8"/>
         </svg>
-        <span>Import hoặc tạo file để bắt đầu</span>
+        <span>Chưa mở file nào. Chọn hoặc tạo file từ danh sách tệp.</span>
       </div>
+    </div>
+    
+    <!-- QUICK MOBILE CODING TOOLBAR -->
+    <div class="quick-code-bar">
+      <button class="quick-code-btn" onclick="insertCodeSnippet('  ')">Tab</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet('<')">&lt;</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet('>')">&gt;</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet('</>')">&lt;/&gt;</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet('{ }', -2)">{ }</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet('( )', -2)">( )</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet('&quot;&quot;', -2)">&quot;&quot;</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet('\'\'', -2)">''</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet(';')">;</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet('=')">=</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet('<div></div>', -6)">div</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet('<style>\n  \n</style>', -10)">style</button>
+      <button class="quick-code-btn" onclick="insertCodeSnippet('<script>\n  \n<\/script>', -11)">script</button>
     </div>
   </div>
 
@@ -569,9 +741,8 @@ body {
       </div>
       <span class="preview-title">preview</span>
       <div class="preview-actions">
-        <button class="btn btn-ghost btn-sm" onclick="resetZoom()" title="Reset zoom">⊞</button>
-        <button class="btn btn-ghost btn-sm" onclick="openExternal()" title="Open in new tab">↗</button>
-        <button class="btn btn-ghost btn-sm" onclick="refreshPreview()" title="Refresh">↻</button>
+        <button class="btn btn-ghost btn-sm" onclick="openExternal()" title="Mở trong tab mới">↗</button>
+        <button class="btn btn-ghost btn-sm" onclick="refreshPreview()" title="Tải lại preview">↻</button>
       </div>
     </div>
     <div class="preview-frame">
@@ -581,11 +752,27 @@ body {
           <rect x="3" y="3" width="18" height="13" rx="2"/>
           <path d="M8 21h8M12 17v4"/>
         </svg>
-        <p>Import files và nhấn <strong style="color:var(--accent2)">Run</strong> để xem preview</p>
+        <p>Nhấn nút <strong style="color:var(--accent2)">Run</strong> ở góc trên để xem kết quả hiển thị</p>
       </div>
     </div>
   </div>
 </div>
+
+<!-- MOBILE BOTTOM NAVIGATION -->
+<nav class="mobile-nav">
+  <button class="mobile-nav-item" id="navFiles" onclick="setMobileView('files')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-6l-2-2H5a2 2 0 00-2 2z"/></svg>
+    <span>Tệp tin</span>
+  </button>
+  <button class="mobile-nav-item active" id="navCode" onclick="setMobileView('code')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
+    <span>Mã nguồn</span>
+  </button>
+  <button class="mobile-nav-item" id="navPreview" onclick="setMobileView('preview')">
+    <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+    <span>Xem trước</span>
+  </button>
+</nav>
 
 <!-- STATUS BAR -->
 <div class="statusbar">
@@ -605,7 +792,7 @@ body {
 <!-- MODAL: New File -->
 <div class="modal-overlay" id="newFileModal">
   <div class="modal">
-    <h3>✨ Tạo file mới</h3>
+    <h3>✨ Tạo tệp tin mới</h3>
     <input class="modal-input" id="newFileName" placeholder="index.html, style.css, app.js ..." />
     <div style="margin-top:10px;display:flex;gap:6px;flex-wrap:wrap;">
       <button class="btn btn-ghost btn-sm" onclick="setNewName('index.html')">index.html</button>
@@ -614,7 +801,7 @@ body {
     </div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Huỷ</button>
-      <button class="btn btn-primary" onclick="confirmNewFile()">Tạo</button>
+      <button class="btn btn-primary" onclick="confirmNewFile()">Tạo file</button>
     </div>
   </div>
 </div>
@@ -624,11 +811,78 @@ body {
 
 <script>
 // ─── STATE ───────────────────────────────────────────────────────────────────
+const STORAGE_KEY = 'web_preview_studio_files_v1';
+
+const defaultStarterFiles = {
+  'index.html': {
+    type: 'html',
+    content: `<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Trang Của Tôi</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n  <div class="card">\n    <h1>✨ Web Preview Studio</h1>\n    <p>Chỉnh sửa mã nguồn HTML/CSS/JS và bấm <strong>Run</strong> để xem kết quả trực tiếp!</p>\n    <button id="btnClick">Thử bấm vào đây 🚀</button>\n    <div id="output" class="output"></div>\n  </div>\n  <script src="script.js"><\/script>\n</body>\n</html>`
+  },
+  'style.css': {
+    type: 'css',
+    content: `/* Phong cách thiết kế CSS */\nbody {\n  margin: 0;\n  padding: 20px;\n  background: #0f172a;\n  color: #f8fafc;\n  font-family: system-ui, -apple-system, sans-serif;\n  display: flex;\n  justify-content: center;\n  align-items: center;\n  min-height: 90vh;\n}\n\n.card {\n  background: #1e293b;\n  padding: 28px;\n  border-radius: 16px;\n  box-shadow: 0 10px 30px rgba(0,0,0,0.5);\n  max-width: 420px;\n  width: 100%;\n  text-align: center;\n  border: 1px solid #334155;\n}\n\nh1 {\n  font-size: 1.4rem;\n  color: #38bdf8;\n  margin-bottom: 10px;\n}\n\np {\n  color: #94a3b8;\n  font-size: 0.95rem;\n  line-height: 1.5;\n}\n\nbutton {\n  background: linear-gradient(135deg, #38bdf8, #818cf8);\n  color: #0f172a;\n  font-weight: 700;\n  border: none;\n  padding: 12px 20px;\n  border-radius: 8px;\n  cursor: pointer;\n  margin-top: 15px;\n  transition: transform 0.15s ease;\n}\nbutton:active {\n  transform: scale(0.95);\n}\n\n.output {\n  margin-top: 15px;\n  font-weight: 600;\n  color: #4ade80;\n}\n`
+  },
+  'script.js': {
+    type: 'js',
+    content: `// Logic JavaScript\nlet count = 0;\ndocument.getElementById('btnClick').addEventListener('click', () => {\n  count++;\n  document.getElementById('output').textContent = \`🎉 Bạn đã tương tác \${count} lần!\`;\n});\n`
+  }
+};
+
 const state = {
   files: {},        // name -> { content, type }
   activeFile: null,
   previewDoc: null,
+  mobileView: 'code' // 'files' | 'code' | 'preview'
 };
+
+// ─── LOCAL STORAGE PERSISTENCE ────────────────────────────────────────────────
+function saveToStorage() {
+  try {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state.files));
+  } catch (e) {
+    console.warn('Storage save failed:', e);
+  }
+}
+
+function loadFromStorage() {
+  try {
+    const data = localStorage.getItem(STORAGE_KEY);
+    if (data) {
+      const parsed = JSON.parse(data);
+      if (parsed && Object.keys(parsed).length > 0) {
+        state.files = parsed;
+        return;
+      }
+    }
+  } catch (e) {
+    console.warn('Storage load failed:', e);
+  }
+  // Fallback to starter files
+  state.files = JSON.parse(JSON.stringify(defaultStarterFiles));
+}
+
+// ─── MOBILE VIEW SWITCHER ────────────────────────────────────────────────────
+function setMobileView(view) {
+  state.mobileView = view;
+  const ws = document.getElementById('workspace');
+  ws.setAttribute('data-mobile-view', view);
+
+  const sidebar = document.getElementById('sidebar');
+  const backdrop = document.getElementById('sidebarBackdrop');
+
+  if (view === 'files') {
+    sidebar.classList.add('mobile-open');
+    backdrop.classList.add('active');
+  } else {
+    sidebar.classList.remove('mobile-open');
+    backdrop.classList.remove('active');
+  }
+
+  document.querySelectorAll('.mobile-nav-item').forEach(el => el.classList.remove('active'));
+  if (view === 'files') document.getElementById('navFiles').classList.add('active');
+  if (view === 'code') document.getElementById('navCode').classList.add('active');
+  if (view === 'preview') document.getElementById('navPreview').classList.add('active');
+}
 
 // ─── FILE UTILS ──────────────────────────────────────────────────────────────
 function getFileType(name) {
@@ -645,7 +899,6 @@ function getFileIcon(type) {
 }
 
 function getMainHtmlFile() {
-  // priority: index.html > first .html file
   if (state.files['index.html']) return 'index.html';
   return Object.keys(state.files).find(n => getFileType(n) === 'html') || null;
 }
@@ -653,18 +906,22 @@ function getMainHtmlFile() {
 function buildPreviewDoc() {
   const mainHtml = getMainHtmlFile();
   if (!mainHtml) {
-    // no HTML: wrap JS+CSS in a simple page
     let css = '', js = '';
     for (const [name, f] of Object.entries(state.files)) {
       if (f.type === 'css') css += f.content + '\n';
       if (f.type === 'js')  js  += f.content + '\n';
     }
-    return `<!DOCTYPE html><html><head><style>${css}</style></head><body><script>${js}<\/script></body></html>`;
+    return `<!DOCTYPE html><html><head><meta name="viewport" content="width=device-width, initial-scale=1.0"><style>${css}</style></head><body><script>${js}<\/script></body></html>`;
   }
 
   let doc = state.files[mainHtml].content;
 
-  // Inline CSS files: replace <link> tags or inject before </head>
+  // Ensure viewport meta exists inside <head> if not present
+  if (!doc.includes('name="viewport"')) {
+    doc = doc.replace(/<head>/i, '<head>\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">');
+  }
+
+  // Inline CSS files
   for (const [name, f] of Object.entries(state.files)) {
     if (f.type !== 'css') continue;
     const linkRe = new RegExp(`<link[^>]+href=["']${escapeRe(name)}["'][^>]*>`, 'gi');
@@ -675,7 +932,7 @@ function buildPreviewDoc() {
     }
   }
 
-  // Inline JS files: replace <script src> tags or inject before </body>
+  // Inline JS files
   for (const [name, f] of Object.entries(state.files)) {
     if (f.type !== 'js') continue;
     const scriptRe = new RegExp(`<script[^>]+src=["']${escapeRe(name)}["'][^>]*><\/script>`, 'gi');
@@ -703,6 +960,7 @@ function formatBytes(b) {
 function addFile(name, content) {
   const type = getFileType(name);
   state.files[name] = { content, type };
+  saveToStorage();
   renderFileList();
   renderEditorTabs();
   setActiveFile(name);
@@ -711,12 +969,13 @@ function addFile(name, content) {
 }
 
 function removeFile(name, e) {
-  e.stopPropagation();
+  if (e) e.stopPropagation();
   delete state.files[name];
   if (state.activeFile === name) {
     const remaining = Object.keys(state.files);
     state.activeFile = remaining.length ? remaining[0] : null;
   }
+  saveToStorage();
   renderFileList();
   renderEditorTabs();
   renderEditorArea();
@@ -725,7 +984,6 @@ function removeFile(name, e) {
 }
 
 function setActiveFile(name) {
-  // save current editor content
   if (state.activeFile) {
     const ta = document.getElementById('editor_' + safeId(state.activeFile));
     if (ta && state.files[state.activeFile]) {
@@ -737,10 +995,35 @@ function setActiveFile(name) {
   renderEditorTabs();
   renderEditorArea();
   updateStatusLang();
+
+  if (window.innerWidth <= 768 && state.mobileView === 'files') {
+    setMobileView('code');
+  }
 }
 
 function safeId(name) {
   return name.replace(/[^a-zA-Z0-9]/g, '_');
+}
+
+// ─── QUICK CODE HELPER FOR MOBILE ──────────────────────────────────────────────
+function insertCodeSnippet(text, cursorOffset = 0) {
+  if (!state.activeFile) return;
+  const edId = 'editor_' + safeId(state.activeFile);
+  const ta = document.getElementById(edId);
+  if (!ta) return;
+
+  const start = ta.selectionStart;
+  const end = ta.selectionEnd;
+  const val = ta.value;
+
+  ta.value = val.substring(0, start) + text + val.substring(end);
+  const newCursor = start + text.length + cursorOffset;
+  ta.selectionStart = ta.selectionEnd = Math.max(start, newCursor);
+  ta.focus();
+
+  state.files[state.activeFile].content = ta.value;
+  saveToStorage();
+  updateStatus();
 }
 
 // ─── RENDER ──────────────────────────────────────────────────────────────────
@@ -750,7 +1033,6 @@ function renderFileList() {
   const count = Object.keys(state.files).length;
   document.getElementById('fileCount').textContent = count;
 
-  // remove old items
   list.querySelectorAll('.file-item').forEach(el => el.remove());
 
   if (count === 0) {
@@ -770,7 +1052,7 @@ function renderFileList() {
       <span class="file-name" title="${name}">${name}</span>
       ${isMain ? '<span class="file-badge badge-main">MAIN</span>' : ''}
       <span class="file-badge badge-${f.type}">${f.type.toUpperCase()}</span>
-      <button class="file-remove" onclick="removeFile('${name}', event)" title="Remove">✕</button>
+      <button class="file-remove" onclick="removeFile('${name}', event)" title="Xoá file">✕</button>
     `;
     list.appendChild(item);
   }
@@ -792,8 +1074,7 @@ function renderEditorArea() {
   const area = document.getElementById('editorArea');
   const noMsg = document.getElementById('noFileMsg');
 
-  // hide all editors
-  area.querySelectorAll('.code-editor').forEach(el => { el.className = el.className.replace(' active',''); });
+  area.querySelectorAll('.code-editor').forEach(el => { el.classList.remove('active'); });
 
   if (!state.activeFile || !state.files[state.activeFile]) {
     if (noMsg) noMsg.style.display = '';
@@ -814,6 +1095,7 @@ function renderEditorArea() {
     ta.value = state.files[state.activeFile].content;
     ta.oninput = () => {
       state.files[state.activeFile].content = ta.value;
+      saveToStorage();
       updateStatus();
     };
     ta.onkeydown = handleEditorKeydown;
@@ -821,19 +1103,13 @@ function renderEditorArea() {
     area.appendChild(ta);
   }
 
-  ta.className = 'code-editor active';
-  ta.focus();
+  ta.classList.add('active');
 }
 
 function handleEditorKeydown(e) {
-  // Tab -> 2 spaces
   if (e.key === 'Tab') {
     e.preventDefault();
-    const start = this.selectionStart;
-    const end = this.selectionEnd;
-    this.value = this.value.substring(0, start) + '  ' + this.value.substring(end);
-    this.selectionStart = this.selectionEnd = start + 2;
-    if (state.activeFile) state.files[state.activeFile].content = this.value;
+    insertCodeSnippet('  ');
   }
 }
 
@@ -864,7 +1140,6 @@ dropZone.addEventListener('drop', e => {
   Array.from(e.dataTransfer.files).forEach(readFile);
 });
 
-// also support drop on the whole workspace
 document.addEventListener('dragover', e => e.preventDefault());
 document.addEventListener('drop', e => {
   e.preventDefault();
@@ -875,16 +1150,16 @@ document.addEventListener('drop', e => {
 
 // ─── RUN / PREVIEW ───────────────────────────────────────────────────────────
 function runPreview() {
-  // sync active editor
   if (state.activeFile) {
     const ta = document.getElementById('editor_' + safeId(state.activeFile));
     if (ta && state.files[state.activeFile]) {
       state.files[state.activeFile].content = ta.value;
+      saveToStorage();
     }
   }
 
   if (Object.keys(state.files).length === 0) {
-    toast('⚠️ Chưa có file nào!', 'error');
+    toast('⚠️ Chưa có file nào để chạy!', 'error');
     return;
   }
 
@@ -897,24 +1172,23 @@ function runPreview() {
   frame.style.display = 'block';
   frame.srcdoc = doc;
 
-  toast('▶ Preview đã được cập nhật', 'success');
+  toast('▶ Preview đã cập nhật!', 'success');
+
+  // Auto switch view to Preview tab on mobile
+  if (window.innerWidth <= 768) {
+    setMobileView('preview');
+  }
 }
 
 function refreshPreview() {
   if (state.previewDoc) runPreview();
 }
 
-let previewWin = null;
 function openExternal() {
   if (!state.previewDoc) { toast('Chạy preview trước!', 'error'); return; }
   const blob = new Blob([state.previewDoc], { type: 'text/html' });
   const url = URL.createObjectURL(blob);
-  previewWin = window.open(url, '_blank');
-}
-
-function resetZoom() {
-  const frame = document.getElementById('preview');
-  frame.style.transform = 'scale(1)';
+  window.open(url, '_blank');
 }
 
 // ─── NEW FILE ─────────────────────────────────────────────────────────────────
@@ -935,12 +1209,13 @@ function closeModal() {
 
 function confirmNewFile() {
   const name = document.getElementById('newFileName').value.trim();
-  if (!name) { toast('Nhập tên file!', 'error'); return; }
+  if (!name) { toast('Vui lòng nhập tên file!', 'error'); return; }
   if (state.files[name]) { toast(`File "${name}" đã tồn tại!`, 'error'); return; }
+  
   const templates = {
-    html: `<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <title>My Page</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n  <h1>Hello World</h1>\n\n  <script src="script.js"><\/script>\n</body>\n</html>`,
-    css:  `/* Styles */\n\nbody {\n  margin: 0;\n  font-family: sans-serif;\n}\n`,
-    js:   `// JavaScript\n\nconsole.log('Hello!');\n`,
+    html: `<!DOCTYPE html>\n<html lang="vi">\n<head>\n  <meta charset="UTF-8">\n  <meta name="viewport" content="width=device-width, initial-scale=1.0">\n  <title>Trang Mới</title>\n  <link rel="stylesheet" href="style.css">\n</head>\n<body>\n\n  <h1>Xin chào!</h1>\n\n  <script src="script.js"><\/script>\n</body>\n</html>`,
+    css:  `/* Style CSS */\nbody {\n  margin: 0;\n  font-family: sans-serif;\n}\n`,
+    js:   `// JavaScript\nconsole.log('Chào mừng!');\n`,
   };
   const type = getFileType(name);
   addFile(name, templates[type] || '');
@@ -959,10 +1234,11 @@ document.getElementById('newFileModal').addEventListener('click', e => {
 // ─── CLEAR ───────────────────────────────────────────────────────────────────
 function clearAll() {
   if (!Object.keys(state.files).length) return;
-  if (!confirm('Xoá tất cả file?')) return;
+  if (!confirm('Xoá tất cả file và làm sạch không gian làm việc?')) return;
   state.files = {};
   state.activeFile = null;
   state.previewDoc = null;
+  saveToStorage();
   document.getElementById('editorTabs').innerHTML = '';
   document.getElementById('editorArea').querySelectorAll('.code-editor').forEach(el => el.remove());
   document.getElementById('editorArea').querySelector('#noFileMsg').style.display = '';
@@ -976,18 +1252,23 @@ function clearAll() {
 // ─── STATUS ──────────────────────────────────────────────────────────────────
 function updateStatus() {
   const count = Object.keys(state.files).length;
-  document.getElementById('statusFiles').textContent = count + ' file' + (count !== 1 ? 's' : '');
+  const statusFiles = document.getElementById('statusFiles');
+  if (statusFiles) statusFiles.textContent = count + ' file' + (count !== 1 ? 's' : '');
+  
   let total = 0;
   for (const f of Object.values(state.files)) total += (f.content || '').length;
-  document.getElementById('statusSize').textContent = formatBytes(total);
+  const statusSize = document.getElementById('statusSize');
+  if (statusSize) statusSize.textContent = formatBytes(total);
 }
 
 function updateStatusLang() {
+  const statusLang = document.getElementById('statusLang');
+  if (!statusLang) return;
   if (state.activeFile) {
     const type = getFileType(state.activeFile).toUpperCase();
-    document.getElementById('statusLang').textContent = type;
+    statusLang.textContent = type;
   } else {
-    document.getElementById('statusLang').textContent = '—';
+    statusLang.textContent = '—';
   }
 }
 
@@ -998,47 +1279,59 @@ function updateCursorStatus() {
   const lines = text.split('\n');
   const ln = lines.length;
   const col = lines[lines.length - 1].length + 1;
-  document.getElementById('statusCursor').textContent = `Ln ${ln}, Col ${col}`;
+  const statusCursor = document.getElementById('statusCursor');
+  if (statusCursor) statusCursor.textContent = `Ln ${ln}, Col ${col}`;
 }
 
-// ─── RESIZE DIVIDER ──────────────────────────────────────────────────────────
+// ─── RESIZE DIVIDER (MOUSE + TOUCH) ──────────────────────────────────────────
 (function initDivider() {
   const divider = document.getElementById('divider');
   const editor  = document.getElementById('editorPanel');
   const preview = document.getElementById('previewPanel');
-  const workspace = document.querySelector('.workspace');
   let dragging = false, startX, startEW, startPW;
 
-  divider.addEventListener('mousedown', e => {
+  function onStart(e) {
+    if (window.innerWidth <= 768) return; // Disable on mobile horizontal stack
     dragging = true;
-    startX  = e.clientX;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    startX  = clientX;
     startEW = editor.offsetWidth;
     startPW = preview.offsetWidth;
     divider.classList.add('dragging');
     document.body.style.cursor = 'col-resize';
     document.body.style.userSelect = 'none';
-  });
+  }
 
-  document.addEventListener('mousemove', e => {
+  function onMove(e) {
     if (!dragging) return;
-    const dx = e.clientX - startX;
+    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
+    const dx = clientX - startX;
     const total = startEW + startPW;
-    let newEW = Math.max(200, startEW + dx);
-    let newPW = Math.max(200, total - newEW);
+    let newEW = Math.max(160, startEW + dx);
+    let newPW = Math.max(160, total - newEW);
     editor.style.flex = 'none';
     editor.style.width = newEW + 'px';
     preview.style.flex = 'none';
     preview.style.width = newPW + 'px';
-  });
+  }
 
-  document.addEventListener('mouseup', () => {
+  function onEnd() {
     if (dragging) {
       dragging = false;
       divider.classList.remove('dragging');
       document.body.style.cursor = '';
       document.body.style.userSelect = '';
     }
-  });
+  }
+
+  divider.addEventListener('mousedown', onStart);
+  divider.addEventListener('touchstart', onStart, { passive: true });
+
+  document.addEventListener('mousemove', onMove);
+  document.addEventListener('touchmove', onMove, { passive: true });
+
+  document.addEventListener('mouseup', onEnd);
+  document.addEventListener('touchend', onEnd);
 })();
 
 // ─── TOAST ───────────────────────────────────────────────────────────────────
@@ -1048,7 +1341,11 @@ function toast(msg, type = '') {
   t.className = 'toast' + (type ? ' ' + type : '');
   t.textContent = msg;
   c.appendChild(t);
-  setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.3s'; setTimeout(() => t.remove(), 300); }, 2500);
+  setTimeout(() => {
+    t.style.opacity = '0';
+    t.style.transition = 'opacity 0.3s';
+    setTimeout(() => t.remove(), 300);
+  }, 2400);
 }
 
 // ─── KEYBOARD SHORTCUTS ──────────────────────────────────────────────────────
@@ -1057,13 +1354,23 @@ document.addEventListener('keydown', e => {
   if ((e.ctrlKey || e.metaKey) && e.key === 'n') { e.preventDefault(); newFile(); }
 });
 
-// ─── SERVICE WORKER ──────────────────────────────────────────────────────────
-if ('serviceWorker' in navigator) {
-  navigator.serviceWorker.register('/render-web/service-worker.js').catch(() => {});
+// ─── INITIALIZATION ──────────────────────────────────────────────────────────
+loadFromStorage();
+const initialFile = getMainHtmlFile() || Object.keys(state.files)[0];
+if (initialFile) {
+  state.activeFile = initialFile;
 }
 
-// init
+renderFileList();
+renderEditorTabs();
+renderEditorArea();
 updateStatus();
+updateStatusLang();
+
+// Run initial preview automatically if index.html exists
+if (initialFile) {
+  runPreview();
+}
 </script>
 </body>
 </html>
